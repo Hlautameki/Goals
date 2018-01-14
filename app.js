@@ -1,36 +1,14 @@
-// var titleChange = function() {
-//     document.querySelector('.title').innerHTML = '<h1><b><i>bladd</i></b></h1>';
-// }
-(function () {
-
-    var task = function(label) {
-        this.label = label;
-    }
-
-    // var firstElement = {
-    //     label: 'Coffee',
-    // }
-
-    // var secondElement = {
-    //     label: 'Tea',
-    // }
-
-    // var thirdElement = {
-    //     label: 'Milk',
-    // }
-
-    var listElements = [new task('Coffee'), new task('Tea'), new task('Milk')];
-
-    listElements.forEach(element => {
-        addElementToTheList(element);
-    });
-
-    function addElementToTheList(element) {
-        addbulletPointToTheList(element.label);
-    }
+var UIController = (function() {
 
     function getList() {
         return document.getElementsByTagName('ul');
+    }
+
+    return { addbulletPointToTheList: function(text) {
+            var list = getList();
+            var newElement = createListElement(text);
+            list[0].appendChild(newElement);
+        }
     }
 
     function createListElement(text) {
@@ -39,15 +17,22 @@
         return element;
     }
 
-    function addbulletPointToTheList(text) {
-        var list = getList();
-        var newElement = createListElement(text);
-        list[0].appendChild(newElement);
-        // console.log(list);
-    }
-
-    addbulletPointToTheList('New element');
 })();
 
-// addbulletPointToTheList('New element');
-// titleChange();
+var controller = (function(uiCtrl) {
+
+    var task = function(label) {
+        this.label = label;
+    }
+
+    var listElements = [new task('Coffee'), new task('Tea'), new task('Milk')];
+
+    listElements.forEach(element => {
+        addElementToTheList(element);
+    });
+
+    function addElementToTheList(element) {
+        uiCtrl.addbulletPointToTheList(element.label);
+    }
+
+})(UIController);
