@@ -19,15 +19,44 @@ var UIController = (function() {
 
 })();
 
-var controller = (function(uiCtrl) {
+var localStorageHelper = {
+    set: function(key, value) {
+        if (!key || !value) {return;}
+
+        if (typeof value === "object") {
+            value = JSON.stringify(value);
+        }
+        localStorage.setItem(key, value);
+    },
+    get: function(key) {
+        var value = localStorage.getItem(key);
+    
+        if (!value) {return;}
+    
+        // assume it is an object that has been stringified
+        if (value[0] === "{" || value[0] === "[") {
+            value = JSON.parse(value);
+        }
+    
+        return value;
+      }
+}
+
+var controller = (function(uiCtrl, lsHelper) {
 
     var task = function(label) {
         this.label = label;
     }
+    
+    // console.log('JSON parsing result: ' + JSON.parse('test'));
 
-    var listElements = [new task('Coffee'), new task('Tea'), new task('Milk')];
+    // var tasks = [new task('Coffee'), new task('Tea'), new task('Milk')];
 
-    listElements.forEach(element => {
+    var tasks = lsHelper.get('tasks', tasks);
+
+    console.log(localStorage.length);
+
+    tasks.forEach(element => {
         addElementToTheList(element);
     });
 
@@ -35,4 +64,4 @@ var controller = (function(uiCtrl) {
         uiCtrl.addbulletPointToTheList(element.label);
     }
 
-})(UIController);
+})(UIController, localStorageHelper);
