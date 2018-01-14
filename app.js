@@ -8,6 +8,7 @@ var UIController = (function() {
             var list = getList();
             var newElement = createListElement(text);
             list[0].appendChild(newElement);
+            list[0].appendChild(document.createElement('hr'));
         }
     }
 

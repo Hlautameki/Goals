@@ -8,10 +8,19 @@ ul {
     margin: 0;
     align-self: left;
     list-style-position: inside;
+    width: 500px;
 }
 
-.main {
+/* .main {
     color: blue;
+} */
+
+hr {
+    border: none;
+    height: 1px;
+    /* Set the hr color */
+    color: rgb(226, 226, 226); /* old IE */
+    background-color: rgb(226, 226, 226); /* Modern Browsers */
 }
 
 .box-container {
