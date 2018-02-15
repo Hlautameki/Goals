@@ -4,13 +4,23 @@ var UIController = (function() {
         return document.getElementsByTagName('ul');
     }
 
-    return { addbulletPointToTheList: function(text) {
+    return { 
+        addbulletPointToTheList: function(text) {
             var list = getList();
             var newElement = createListElement(text);
             list[0].appendChild(newElement);
             list[0].appendChild(document.createElement('hr'));
+        },
+
+        addLinkElementToTheList: function() {
+            var list = getList();
+            var linkElement = document.createElement('a');
+            linkElement.appendChild(document.createTextNode('+ Add Task'));
+            linkElement.href = '';
+            linkElement.onclick = function() { return cancelHref() };
+            list[0].appendChild(linkElement);
         }
-    }
+    };
 
     function createListElement(text) {
         var element = document.createElement('li');
@@ -65,4 +75,18 @@ var controller = (function(uiCtrl, lsHelper) {
         uiCtrl.addbulletPointToTheList(element.label);
     }
 
+    uiCtrl.addLinkElementToTheList();
+
+    // var testa = document.querySelector('a');
+    // console.log(testa);
+
+    document.querySelector('a').addEventListener('click', function(){
+        console.log('event w');
+        // return false;
+    });
+
 })(UIController, localStorageHelper);
+
+function cancelHref() {
+    return false;
+}

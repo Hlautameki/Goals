@@ -33,3 +33,22 @@ hr {
 .title {
     color: green;
 }
+
+a:link {
+    text-decoration: none;
+    color: black;
+}
+
+a:visited {
+    text-decoration: none;
+    color: #a5a5a5;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: grey;
+}
+
+a:active {
+    text-decoration: underline;
+}
