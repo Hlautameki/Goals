@@ -4,27 +4,70 @@ var UIController = (function() {
         return document.getElementsByTagName('ul');
     }
 
+    var inputElement;
+    var cancelListElement;
+
     return { 
         addbulletPointToTheList: function(text) {
             var list = getList();
-            var newElement = createListElement(text);
-            list[0].appendChild(newElement);
+            var newElement = createListElement(document.createTextNode(text));
+            addToTheList(newElement);
             list[0].appendChild(document.createElement('hr'));
         },
 
         addLinkElementToTheList: function() {
-            var list = getList();
             var linkElement = document.createElement('a');
             linkElement.appendChild(document.createTextNode('+ Add Task'));
             linkElement.href = '';
             linkElement.onclick = function() { return cancelHref() };
-            list[0].appendChild(linkElement);
+            var listElement = createListElement(linkElement);
+            listElement.style.listStyleType = 'none';
+            addToTheList(listElement);
+        },
+
+        addInputElement: function() {
+            if (inputElement === undefined) {
+                inputElement = document.createElement('input');
+                inputElement.setAttribute("type", "text");
+                inputElement.focus();
+                inputElement.select();
+                var listElement = createListElement(inputElement);
+                listElement.style.listStyleType = 'none';
+                addToTheList(listElement);
+
+                var cancelButton = document.createElement('a');
+                cancelButton.appendChild(document.createTextNode('Cancel'));
+                cancelButton.href = '';
+                cancelButton.onclick = function() {
+                    var addTaskLink = document.getElementsByTagName('a')[0];
+                    addTaskLink.style.display = 'block';
+                    cancelListElement.style.display = 'none';
+                    inputElement.style.display = 'none';
+                    return cancelHref();
+                };
+                cancelListElement = createListElement(cancelButton);
+                cancelListElement.style.listStyleType = 'none';
+                addToTheList(cancelListElement);
+            } else {
+                inputElement.style.display = 'block';
+                cancelListElement.style.display = 'block';
+            }
+        },
+
+        hideAddTaskLink: function() {
+            var addTaskLink = document.getElementsByTagName('a')[0];
+            addTaskLink.style.display = 'none';
         }
     };
 
-    function createListElement(text) {
+    function addToTheList(element) {
+        var list = getList();
+        list[0].appendChild(element);
+    }
+
+    function createListElement(child) {
         var element = document.createElement('li');
-        element.appendChild(document.createTextNode(text));
+        element.appendChild(child);
         return element;
     }
 
@@ -64,7 +107,6 @@ var controller = (function(uiCtrl, lsHelper) {
     // var tasks = [new task('Coffee'), new task('Tea'), new task('Milk')];
 
     var tasks = lsHelper.get('tasks', tasks);
-
     console.log(localStorage.length);
 
     tasks.forEach(element => {
@@ -81,7 +123,9 @@ var controller = (function(uiCtrl, lsHelper) {
     // console.log(testa);
 
     document.querySelector('a').addEventListener('click', function(){
-        console.log('event w');
+        // console.log('event w');
+        uiCtrl.addInputElement();
+        uiCtrl.hideAddTaskLink();
         // return false;
     });
 
