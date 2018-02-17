@@ -5,7 +5,8 @@ var UIController = (function() {
     }
 
     var inputElement;
-    var cancelListElement;
+    var addCancelListElement;
+    var submitAddTaskElement;
 
     return { 
         addbulletPointToTheList: function(text) {
@@ -41,16 +42,25 @@ var UIController = (function() {
                 cancelButton.onclick = function() {
                     var addTaskLink = document.getElementsByTagName('a')[0];
                     addTaskLink.style.display = 'block';
-                    cancelListElement.style.display = 'none';
+                    addCancelListElement.style.display = 'none';
                     inputElement.style.display = 'none';
                     return cancelHref();
                 };
-                cancelListElement = createListElement(cancelButton);
-                cancelListElement.style.listStyleType = 'none';
-                addToTheList(cancelListElement);
+                cancelButton.style.marginLeft = '1em';
+                
+                var addTaskButton = document.createElement('a');
+                addTaskButton.appendChild(document.createTextNode('Add task'));
+                addTaskButton.href = '';
+                addTaskButton.onclick = cancelButton.onclick;
+
+                addCancelListElement = createListElement(addTaskButton);
+                addCancelListElement.style.listStyleType = 'none';
+                addToTheList(addCancelListElement);
+
+                addCancelListElement.appendChild(cancelButton);
             } else {
                 inputElement.style.display = 'block';
-                cancelListElement.style.display = 'block';
+                addCancelListElement.style.display = 'block';
             }
         },
 
