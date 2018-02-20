@@ -11,10 +11,6 @@ var UIController = (function() {
     return { 
         addbulletPointToTheList: function(text) {
             addbulletPointToTheListInternal(text);
-            // var list = getList();
-            // var newElement = createListElement(document.createTextNode(text));
-            // addToTheList(newElement);
-            // list[0].appendChild(document.createElement('hr'));
         },
 
         addLinkElementToTheList: function() {
@@ -41,12 +37,9 @@ var UIController = (function() {
                     }
                 };
                 
-                
-                // inputElement.onkeydown = function(e) {
-                //     if (e.keyCode == 13) {
+                var fontFamily = inputElement.style.fontFamily;
+                console.log(fontFamily);
 
-                //     }
-                // }
                 var listElement = createListElement(inputElement);
                 listElement.style.listStyleType = 'none';
                 addToTheList(listElement);
