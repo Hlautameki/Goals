@@ -37,8 +37,6 @@ var UIController = (function() {
                     }
                 };
                 
-                var fontFamily = inputElement.style.fontFamily;
-                console.log(fontFamily);
 
                 var listElement = createListElement(inputElement);
                 listElement.style.listStyleType = 'none';
