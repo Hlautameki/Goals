@@ -10,10 +10,11 @@ var UIController = (function() {
 
     return { 
         addbulletPointToTheList: function(text) {
-            var list = getList();
-            var newElement = createListElement(document.createTextNode(text));
-            addToTheList(newElement);
-            list[0].appendChild(document.createElement('hr'));
+            addbulletPointToTheListInternal(text);
+            // var list = getList();
+            // var newElement = createListElement(document.createTextNode(text));
+            // addToTheList(newElement);
+            // list[0].appendChild(document.createElement('hr'));
         },
 
         addLinkElementToTheList: function() {
@@ -30,20 +31,33 @@ var UIController = (function() {
             if (inputElement === undefined) {
                 inputElement = document.createElement('input');
                 inputElement.setAttribute("type", "text");
-                inputElement.focus();
-                inputElement.select();
+                inputElement.onkeypress = function(e) {
+                    if (e.keyCode === 13) {
+                        if (inputElement.value !== undefined && inputElement.value !== '') {
+                            addTask();
+                        } else {
+                            cancelAddTask();
+                        }
+                    }
+                };
+                
+                
+                // inputElement.onkeydown = function(e) {
+                //     if (e.keyCode == 13) {
+
+                //     }
+                // }
                 var listElement = createListElement(inputElement);
                 listElement.style.listStyleType = 'none';
                 addToTheList(listElement);
-
+                inputElement.focus();
+                inputElement.select();
+                
                 var cancelButton = document.createElement('a');
                 cancelButton.appendChild(document.createTextNode('Cancel'));
                 cancelButton.href = '';
                 cancelButton.onclick = function() {
-                    var addTaskLink = document.getElementsByTagName('a')[0];
-                    addTaskLink.style.display = 'block';
-                    addCancelListElement.style.display = 'none';
-                    inputElement.style.display = 'none';
+                    cancelAddTask();
                     return cancelHref();
                 };
                 cancelButton.style.marginLeft = '1em';
@@ -51,7 +65,10 @@ var UIController = (function() {
                 var addTaskButton = document.createElement('a');
                 addTaskButton.appendChild(document.createTextNode('Add task'));
                 addTaskButton.href = '';
-                addTaskButton.onclick = cancelButton.onclick;
+                addTaskButton.onclick = function() {
+                    addTask();
+                    return cancelHref();
+                };
 
                 addCancelListElement = createListElement(addTaskButton);
                 addCancelListElement.style.listStyleType = 'none';
@@ -60,6 +77,9 @@ var UIController = (function() {
                 addCancelListElement.appendChild(cancelButton);
             } else {
                 inputElement.style.display = 'block';
+                inputElement.value = null;
+                inputElement.focus();
+                inputElement.select();
                 addCancelListElement.style.display = 'block';
             }
         },
@@ -70,15 +90,46 @@ var UIController = (function() {
         }
     };
 
+    function addTask() {
+        insertBefore(inputElement.value)
+        cancelAddTask();
+    }
+
+    function cancelAddTask() {
+        var addTaskLink = document.getElementsByTagName('a')[0];
+        addTaskLink.style.display = 'block';
+        addCancelListElement.style.display = 'none';
+        inputElement.style.display = 'none';
+    }
+
     function addToTheList(element) {
         var list = getList();
         list[0].appendChild(element);
+    }
+
+    function addToTheListBefore(element) {
+        var list = getList()[0];
+        list.insertBefore(element, list.childNodes[(list.childElementCount - 2)]);
     }
 
     function createListElement(child) {
         var element = document.createElement('li');
         element.appendChild(child);
         return element;
+    }
+
+    function insertBefore(text) {
+        var list = getList();
+        var newElement = createListElement(document.createTextNode(text));
+        addToTheListBefore(newElement);
+        addToTheListBefore(document.createElement('hr'));
+    }
+
+    function addbulletPointToTheListInternal(text) {
+        var list = getList();
+        var newElement = createListElement(document.createTextNode(text));
+        addToTheList(newElement);
+        list[0].appendChild(document.createElement('hr'));
     }
 
 })();
